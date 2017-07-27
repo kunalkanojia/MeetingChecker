@@ -1,7 +1,5 @@
 package io.kkanojia.service
 
-import java.nio.file.Paths
-
 import io.kkanojia.models.UserLocationInfo
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 
@@ -16,7 +14,7 @@ object CheckerService {
   /**
     * Given all information checks if meeting happened between the two parties.
     * Definition of meeting :
-    * It is assumend that meeting happened if -
+    * It is assumed that meeting happened if -
     * 1. They were on the same floor within 5 units distance
     * 2. In time frame of approximately 6 mins.
     */
@@ -35,7 +33,13 @@ object CheckerService {
 
     val userData = getMeetingFloorAndTime()
 
-    userData.show(50)
+    if (userData.rdd.isEmpty()) {
+      println("No Meeting happened")
+    } else {
+      println("Meeting happened, possibly at below floor and apprroximate time.")
+      userData.show()
+    }
+
   }
 
   /**
